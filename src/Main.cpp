@@ -10,6 +10,9 @@
 	int SCREEN_WIDTH = 640;
 	int SCREEN_HEIGHT = 480;
 
+	GLfloat gCameraX = 0.f, gCameraY = 0.f;
+	const Uint8 *state;
+	
 //Initialise Opengl
 bool initGL(){
 
@@ -34,7 +37,6 @@ bool initGL(){
 	}
 	//set color to use when you clear the gl
 	glClearColor(0.f, 0.f, 0.f, 1.f);
-	
 	return true;
 
 	
@@ -82,7 +84,24 @@ bool Quit(){
 }
 
 void Update(){
-	
+	if(state[SDL_SCANCODE_UP]){
+		gCameraY -= 0.05f;
+	}
+	if(state[SDL_SCANCODE_DOWN]){
+		gCameraY += 0.05f;
+	}
+	if(state[SDL_SCANCODE_LEFT]){
+		gCameraX -= 0.05f;
+	}
+	if(state[SDL_SCANCODE_RIGHT]){
+		gCameraX += 0.05f;
+	}
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+	glLoadIdentity();
+
+	glTranslatef(-gCameraX, -gCameraY, 0.f);
+	glPushMatrix;
 }
 
 //render
@@ -112,6 +131,7 @@ int main(){
 	unsigned int FPSupdate = SDL_GetTicks();
 	unsigned int currentTime;	
 	int FPS = 0;
+	state = SDL_GetKeyboardState(NULL);	
 	//constantly loop while running
 	while(running){
 		
